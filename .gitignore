@@ -1,3 +1,4 @@
+data/
 # Python
 __pycache__/
 *.pyc
@@ -8,15 +9,15 @@ __pycache__/
 venv/
 .env
 
+*.log
+*.sqlite3
+
+.DS_Store
+Thumbs.db
+
 # FAISS / Chroma index
 *.index
 *.db
 
 # Jupyter
 .ipynb_checkpoints/
-
-*.log
-*.sqlite3
-
-.DS_Store
-Thumbs.db

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*$py.class
+*.env
+venv/
+.env
+
+# FAISS / Chroma index
+*.index
+*.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+*.log
+*.sqlite3
+
+.DS_Store
+Thumbs.db

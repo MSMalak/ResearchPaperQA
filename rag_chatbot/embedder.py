@@ -1,8 +1,14 @@
 # rag_chatbot/embedder.py
 import os
+from dotenv import load_dotenv
 import logging
 from typing import List, Union, Optional
 from abc import ABC, abstractmethod
+from openai import OpenAI
+from langchain.embeddings.base import Embeddings
+
+# Charger les variables depuis config.env
+load_dotenv('./config.env')
 
 # Import with fallbacks for different embedding providers
 try:
@@ -28,7 +34,7 @@ except ImportError:
 # Set up logging
 logger = logging.getLogger(__name__)
 
-class BaseEmbeddingWrapper(ABC):
+class BaseEmbeddingWrapper(Embeddings):
     """Abstract base class for embedding wrappers to ensure consistent interface."""
     
     @abstractmethod
@@ -57,7 +63,7 @@ class OpenAIEmbeddingWrapper(BaseEmbeddingWrapper):
         try:
             self.embeddings = OpenAIEmbeddings(
                 model=model_name,
-                api_key=api_key
+                openai_api_key=api_key
             )
             # Test the connection
             self.embeddings.embed_query("test")
@@ -115,7 +121,7 @@ class HuggingFaceEmbeddingWrapper(BaseEmbeddingWrapper):
         return self.embeddings.embed_query(text)
 
 def get_embeddings(
-    provider: str = "sentence-transformers", 
+    provider: str = "huggingface", 
     model_name: Optional[str] = None,
     **kwargs
 ) -> BaseEmbeddingWrapper:
@@ -166,10 +172,10 @@ def get_embeddings(
     except Exception as e:
         logger.error(f"Failed to initialize {provider} embeddings: {str(e)}")
         
-        # Fallback to sentence-transformers if available
-        if provider != "sentence-transformers" and SENTENCE_TRANSFORMERS_AVAILABLE:
-            logger.info("Falling back to sentence-transformers...")
-            return SentenceTransformerWrapper()
+        # Fallback to huggingface if available
+        if provider != "huggingface" and HUGGINGFACE_AVAILABLE:
+            logger.info("Falling back to huggingface...")
+            return HuggingFaceEmbeddingWrapper()
         
         raise
 

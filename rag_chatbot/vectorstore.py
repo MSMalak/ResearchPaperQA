@@ -199,7 +199,8 @@ class VectorStoreManager:
             "created_at": datetime.now().isoformat(),
             "store_type": self.store_type,
             "num_documents": len(documents),
-            "embedding_provider": getattr(self.embeddings, '__class__', {}).get('__name__', 'unknown'),
+            #"embedding_provider": getattr(self.embeddings, '__class__', {}).get('__name__', 'unknown'),
+            "embedding_provider": self.embeddings.__class__.__name__,
             "total_chars": sum(len(doc.page_content) for doc in documents),
             "avg_doc_length": sum(len(doc.page_content) for doc in documents) / len(documents),
             "kwargs": kwargs
@@ -282,6 +283,32 @@ class VectorStoreManager:
             logger.error(f"Error adding documents: {str(e)}")
             raise
 
+    def delete_index(self, index_path: str) -> bool:
+        """
+        Delete an existing index directory.
+        
+        Args:
+            index_path: Path to the index directory
+            
+        Returns:
+            bool: True if successfully deleted, False otherwise
+        """
+        import shutil
+        
+        index_path = Path(index_path)
+        
+        try:
+            if index_path.exists():
+                shutil.rmtree(index_path)
+                logger.info(f"Deleted index at {index_path}")
+                return True
+            else:
+                logger.info(f"Index at {index_path} does not exist")
+                return False
+        except Exception as e:
+            logger.error(f"Error deleting index: {str(e)}")
+            return False
+
     def get_stats(self) -> Dict[str, Any]:
         """Get vector store statistics."""
         stats = {
@@ -301,7 +328,7 @@ class VectorStoreManager:
 # Convenience functions for backward compatibility
 def create_faiss_index(
     documents: List[Document], 
-    embedding_model: str = "sentence-transformers", 
+    embedding_model: str = "huggingface", 
     index_path: str = "faiss_index",
     **kwargs
 ) -> FAISS:

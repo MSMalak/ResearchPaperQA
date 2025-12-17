@@ -21,3 +21,5 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+
+.ui_cache/

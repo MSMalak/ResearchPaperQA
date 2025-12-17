@@ -55,6 +55,19 @@ Then ask questions directly in the terminal, for example:
 
 ---
 
+## 🖥️ UI Demo (optional)
+
+An optional Streamlit interface is provided for quick interactive demos.
+
+```bash
+pip install -r requirements-ui.txt
+streamlit run app.py
+```
+
+> Note: Local generation can be slower depending on hardware.
+For faster responses, prefer the CLI with the OpenAI backend (`--generator openai`) if an API key is available.
+---
+
 ## 🧠 How it works
 
 1. Load PDFs from a directory
@@ -114,7 +127,7 @@ rag_chatbot/
 
 ## 📌 Limitations & future work
 
-* No UI (terminal-only by design)
+* UI provided as an optional Streamlit demo (CLI remains the primary interface)
 * Single-document indexing (for now)
 * Potential extensions:
 

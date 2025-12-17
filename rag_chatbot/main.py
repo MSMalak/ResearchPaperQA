@@ -3,6 +3,7 @@ import sys
 import os
 import logging
 from typing import Optional, Dict, Any
+import argparse
 
 from rag_chatbot.generator import RAGChatbot, get_available_generators
 
@@ -12,6 +13,37 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="ResearchPaperQA — RAG chatbot over research PDFs"
+    )
+
+    parser.add_argument(
+        "--documents",
+        type=str,
+        default="data/sample_papers",
+        help="Path to directory containing PDF documents"
+    )
+
+    parser.add_argument(
+        "--generator",
+        type=str,
+        choices=["local", "openai"],
+        default="local",
+        help="Answer generation backend"
+    )
+
+    parser.add_argument(
+        "--recreate",
+        action="store_true",
+        help="Rebuild vector index from documents"
+    )
+
+    return parser.parse_args()
+
 
 def display_welcome():
     """Display welcome message and instructions."""
@@ -243,25 +275,14 @@ def interactive_chat(chatbot: RAGChatbot):
 
 def main():
     """Main function."""
-    # Parse simple command line arguments
-    force_recreate = "--recreate" in sys.argv
-    generator_type = "auto"
-    documents_path = "data/sample_papers"
-    
-    # Simple argument parsing
-    for i, arg in enumerate(sys.argv):
-        if arg == "--generator" and i + 1 < len(sys.argv):
-            generator_type = sys.argv[i + 1]
-        elif arg == "--documents" and i + 1 < len(sys.argv):
-            documents_path = sys.argv[i + 1]
-    
-    # Setup chatbot
+    args = parse_args()
+
     chatbot = setup_chatbot(
-        documents_path=documents_path,
-        generator_type=generator_type,
-        force_recreate=force_recreate
+        documents_path=args.documents,
+        generator_type=args.generator,
+        force_recreate=args.recreate
     )
-    
+   
     if chatbot is None:
         print("\n❌ Failed to initialize chatbot. Exiting...")
         sys.exit(1)

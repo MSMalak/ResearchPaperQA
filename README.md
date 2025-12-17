@@ -1,10 +1,129 @@
-This project implements a Research Paper Question-Answering (QA) chatbot using Retrieval-Augmented Generation (RAG). 
-It allows users to ask questions about research papers and receive accurate, context-aware answers. 
+# 📄 ResearchPaperQA
 
-Key features:
-- PDF/Document loader for research papers
-- Embedding generation for efficient retrieval
-- RAG pipeline for context-based answer generation
-- Modular design for easy extension to new datasets or models
+**Ask questions to research papers using a local RAG pipeline (PDF → FAISS → LLM).**
 
-The project is designed for researchers and AI enthusiasts to explore QA over academic literature with modern NLP techniques.
+ResearchPaperQA is a lightweight, end-to-end Retrieval-Augmented Generation (RAG) demo that allows you to query research papers (PDFs) from the terminal using semantic search and language models.
+
+---
+
+## 🚀 Features
+
+* 📚 PDF ingestion and chunking
+* 🔍 Semantic retrieval with Sentence-Transformers + FAISS
+* 🤖 Answer generation with:
+
+  * Local HuggingFace models (default)
+  * OpenAI models (optional)
+* 🧩 Modular architecture (loader / embedder / vector store / generator)
+* 🖥️ Clean CLI interface (`researchpaperqa`)
+* 🔁 Reproducible indexing with cache control
+
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/MSMalak/ResearchPaperQA.git
+cd ResearchPaperQA
+
+python -m venv venv
+source venv/bin/activate
+pip install -e .
+```
+
+> The project is installed in *editable mode* so changes are picked up automatically.
+
+---
+
+## ▶️ Quickstart
+
+Build the vector index and start querying papers:
+
+```bash
+researchpaperqa --documents data/sample_papers --recreate
+```
+
+Then ask questions directly in the terminal, for example:
+
+* *“What is the main contribution of this paper?”*
+* *“Which methodology is used?”*
+* *“What problem does the paper address?”*
+
+---
+
+## 🧠 How it works
+
+1. Load PDFs from a directory
+2. Split documents into semantic chunks
+3. Embed chunks using Sentence-Transformers
+4. Index embeddings with FAISS
+5. Retrieve top-k relevant chunks for a query
+6. Generate an answer conditioned on retrieved context
+
+```
+PDFs → Chunking → Embeddings → FAISS → Retrieval → Answer
+```
+
+---
+
+## ⚙️ CLI Usage
+
+```bash
+researchpaperqa --help
+```
+
+```text
+usage: researchpaperqa [-h] [--documents DOCUMENTS]
+                       [--generator {local,openai}] [--recreate]
+
+ResearchPaperQA — RAG chatbot over research PDFs
+```
+
+### Options
+
+* `--documents` : path to a directory containing PDF files
+* `--generator` : `local` (HuggingFace) or `openai`
+* `--recreate`  : force rebuilding the vector index
+
+---
+
+## 🔐 Notes on security & reproducibility
+
+* The FAISS index uses pickle-based serialization internally.
+* Deserialization is enabled only for locally created indexes.
+* Vector indexes and metadata are intentionally excluded from version control.
+
+---
+
+## 🧪 Project structure
+
+```text
+rag_chatbot/
+├── loader.py        # PDF loading & chunking
+├── embedder.py      # Embedding models
+├── vectorstore.py   # FAISS index management
+├── generator.py    # LLM backends
+├── main.py          # CLI entry point
+```
+
+---
+
+## 📌 Limitations & future work
+
+* No UI (terminal-only by design)
+* Single-document indexing (for now)
+* Potential extensions:
+
+  * Multi-document comparison
+  * Streaming answers
+  * Web or notebook interface
+  * Evaluation of retrieval quality
+
+---
+
+## 📄 License
+
+MIT License
+
+
+

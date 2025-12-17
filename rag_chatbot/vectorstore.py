@@ -165,7 +165,7 @@ class VectorStoreManager:
             self._load_metadata(index_path)
             
             if self.store_type == "faiss":
-                vectorstore = FAISS.load_local(str(index_path), self.embeddings)
+                vectorstore = FAISS.load_local(str(index_path), self.embeddings, allow_dangerous_deserialization=True)
             elif self.store_type == "chroma":
                 vectorstore = Chroma(
                     persist_directory=str(index_path),

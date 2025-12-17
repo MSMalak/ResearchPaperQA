@@ -1,8 +1,12 @@
+![CI](https://github.com/MSMalak/ResearchPaperQA/actions/workflows/tests.yml/badge.svg)
+
 # 📄 ResearchPaperQA
+
+> RAG pipeline for querying research papers from the terminal.
 
 **Ask questions to research papers using a local RAG pipeline (PDF → FAISS → LLM).**
 
-ResearchPaperQA is a lightweight, end-to-end Retrieval-Augmented Generation (RAG) demo that allows you to query research papers (PDFs) from the terminal using semantic search and language models.
+ResearchPaperQA is a lightweight Retrieval-Augmented Generation (RAG) demo that allows you to query research papers (PDFs) directly from the terminal using semantic search and language models.
 
 ---
 

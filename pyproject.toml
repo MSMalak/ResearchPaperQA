@@ -30,6 +30,7 @@ dependencies = [
   "torch==2.2.2",
   "tqdm==4.67.1",
   "transformers==4.56.1",
+  "streamlit==1.41.1",
 ]
 
 [project.scripts]
